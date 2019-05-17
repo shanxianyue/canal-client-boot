@@ -5,6 +5,7 @@ import com.alibaba.otter.canal.protocol.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.scheduling.annotation.Async;
 
@@ -17,6 +18,8 @@ public abstract class AbstractCanalClient implements CommandLineRunner {
 
     protected final static Logger logger = LoggerFactory.getLogger(AbstractCanalClient.class);
 
+    @Value("${canal.instance.filter.regex}")
+    private String regex;
 
     @Async
     @Override
@@ -25,7 +28,7 @@ public abstract class AbstractCanalClient implements CommandLineRunner {
         while (running) {
             try {
                 connector.connect();
-                connector.subscribe();
+                connector.subscribe(regex);
                 while (running) {
                     Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
                     long batchId = message.getId();

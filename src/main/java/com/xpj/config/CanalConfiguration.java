@@ -12,10 +12,10 @@ import java.net.InetSocketAddress;
 @Configuration
 public class CanalConfiguration {
 
-    @Value("example")
+    @Value("${canal.destination}")
     private String destination;
 
-    @Value("11111")
+    @Value("${canal.port}")
     private int port;
 
     @Bean
